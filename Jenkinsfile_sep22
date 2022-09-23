@@ -3,7 +3,6 @@ node{
   stage('1cloneCode'){
     sh "git clone https://github.com/optimal09/mwa-unmerged.git"
   }
-  /*
   stage('2Test&Build'){
     sh "${mavenHome}/bin/mvn clean package"
     //bat "${mavenHome}/bin/mvn clean package"
