@@ -108,7 +108,7 @@
 	</distributionManagement>
 	
 	<build>
-		<finalName>EBAY</finalName>
+		<finalName>EBAY-APP</finalName>
 		
 		<plugins>
 			<plugin>
