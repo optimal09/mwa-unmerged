@@ -1,41 +1,27 @@
 node{
   def mavenHome = tool name: 'maven3.8.6'
   stage('1cloneCode'){
-    git "https://github.com/LandmakTechnology/maven-web-application"
+    git "https://github.com/optimal09/mwa-unmerged.git"
   }
-  stage('2Test&Build'){
+    stage('2Test&Build'){
     sh "${mavenHome}/bin/mvn clean package"
     //bat "${mavenHome}/bin/mvn clean package"
-  }
-  stage('3codeQuality'){
+    }
+    stage('3codeQuality'){
     sh "${mavenHome}/bin/mvn  sonar:sonar"
-  }
-  stage('4uploadArtifacts'){
-    //sh "${mavenHome}/bin/mvn deploy"
-    //http://54.177.1.11:8081/repository/maven-snapshots/
-    //http://54.177.1.11:8081/repository/newjob-releases/
-    // vi pom.xml and added repository details   
-    // vi setting.xml and add AUTHENTICATION details  
-  } 
-  stage('5deploy2UAT'){
+    }
+    stage('4uploadArtifacts'){
+    sh "${mavenHome}/bin/mvn deploy"
+    }
+    stage('5deploy2UAT'){
     sh "echo 'deploy to UAT'  "
-    deploy adapters: [tomcat8(credentialsId: 'tomcat-credentials', path: '', url: 'http://35.170.249.131:8080/')], contextPath: null, war: 'target/*war'
-  }
-  stage('6approvalGate'){
-    sh "echo 'ready for review' "
-    timeout(time:5, unit:'DAYS') {
-    input message: 'Application ready for deployment, Please review and approve'
-      }
-  }
-  stage('7deploy2Prod'){
+    deploy adapters: [tomcat9(credentialsId: 'tomcat-credentials', path: '', url: 'http://13.56.20.242:8080/')], contextPath: null, war: 'target/*'
+    }
+    stage('8emailNotification'){
+        emailext body: 'test the app. thank you', recipientProviders: [buildUser(), culprits(), developers()], subject: 'hello', to: 'baruwasamson4@gmail.com'
+    }
+     stage('7deploy2Prod'){
     sh "sleep  50"
-    deploy adapters: [tomcat8(credentialsId: 'tomcat-credentials', path: '', url: 'http://35.170.249.131:8080/')], contextPath: null, war: 'target/*war'
-  }
-  stage('8emailNotification'){
-    emailext body: '''Hi All,
-
-Check Build status.
-
-Landmark Technologies''', recipientProviders: [buildUser(), developers(), upstreamDevelopers(), brokenBuildSuspects(), brokenTestsSuspects(), contributor()], subject: 'build status', to: 'tesla-app@gmail.com'
-  }
+    deploy adapters: [tomcat9(credentialsId: 'tomcat-credentials', path: '', url: 'http://13.56.20.242:8080/')], contextPath: null, war: 'target/*'
+     }
 }
