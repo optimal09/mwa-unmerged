@@ -96,13 +96,13 @@
 	    <repository>
 	      <id>nexus</id>
 	      <name>Landmark Technologies Releases Nexus Repository</name>
-	      <url>http://54.177.1.11:8081/repository/newjob-releases/</url>
+	      <url>http://54.177.1.11:8081/repository/dev-new-job-releases/</url>
 	    </repository>
 	    
 	    <snapshotRepository>
 	      <id>nexus</id>
 	      <name>Landmark Technologies Snapshot Nexus Repository </name>
-	      <url>http://54.177.1.11:8081/repository/newjob-snapshots/</url>
+	      <url>http://54.177.1.11:8081/repository/dev-new-job-snapshots/</url>
 	    </snapshotRepository>
 	    
 	</distributionManagement>
