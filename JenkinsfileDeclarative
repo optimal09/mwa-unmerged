@@ -4,7 +4,7 @@ agent any
 
 tools
 {
-  maven 'maven3.6.3'
+  maven 'maven3.8.6'
 
 }
 
@@ -22,36 +22,35 @@ options{
    stage('CheckoutCode')
    {
      steps{
-	 git branch: 'development', credentialsId: '8e348aa2-9531-4dbe-863d-1adb64897470', url: 'https://github.com/LandmakTechnology/maven-web-application.git'
-	 }
+   git branch: 'dev', credentialsId: 'tomcat-credentials', url: 'https://github.com/optimal09/mwa-unmerged.git'
+   }
    }
    
    stage('Build')
    {
     steps{
-	  sh "mvn clean package"
-	 }
+    sh "mvn clean package"
+   }
    }
    
     stage('ExecuteSonarQubeReport')
    {
      steps{
-	  sh "mvn sonar:sonar"
-	 }
+    sh "mvn sonar:sonar"
+   }
    }
    
    stage('UploadArtifactintoNexus')
    {
      steps{
-	  sh "mvn deploy"
-	 }
+    sh "mvn deploy"
+   }
    }
    
   stage('DeployAppIntoTomcat')
  {
    steps{
-  sshagent(['2b7b0c6a-5eff-4f4a-82c3-3630f91c70b5']) {
-  sh "scp -o StrictHostKeyChecking=no target/maven-web-application.war ec2-user@3.1.222.74:/opt/apache-tomcat-9.0.41/webapps/"
+  deploy adapters: [tomcat9(credentialsId: 'tomcat-credentials', path: '', url: 'http://13.56.20.242:8080/')], contextPath: null, war: 'target/*'
   }
  }
  }
@@ -59,7 +58,7 @@ options{
   
  
  }
- 
+ /*
  post{
  
  
@@ -78,6 +77,5 @@ options{
  Landmark Technologies,
  +1 437 215 2483,''', cc: 'mylandmarktech@gmail.com', from: '', replyTo: '', subject: 'BuildOver!!', to: 'mylandmarktech@gmail.com'
  }
- 
  }
-}
+ */
